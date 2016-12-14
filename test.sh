@@ -18,14 +18,19 @@ fi
 wget  $picl_url
 wget $pics_url
 
-picl_md5=`md5sum ${picl}.txt`
-pics_md5=`md5sum ${pics}.txt`
+picl_md5=`md5sum ${picl}.txt | awk '{print $1}'`
+pics_md5=`md5sum ${pics}.txt | awk '{print $1}'`
 
-echo "$picl $picl_md5"
-echo "$pics $pics_md5"
+old_picl_md5=`md5sum $picl | awk '{print $1}'`
+old_pics_md5=`md5sum $pics | awk '{print $1}'`
 
-old_picl_md5=`md5sum $picl`
-old_pics_md5=`md5sum $pics`
+printf "%-15s | %-35s |\n" "$picl" "$old_picl_md5"
+printf "%-15s | %-35s |\n" "${picl}.txt" "$picl_md5"
+
+printf "%-15s | %-35s |\n" "$pics" "$old_pics_md5"
+printf "%-15s | %-35s |\n" "${pics}.txt" "$pics_md5"
+
+echo ""
 
 if [[ "$picl_md5" != "$old_picl_md5" ]]
 then
@@ -40,7 +45,7 @@ then
  echo "$pics changed"
  diff $pics ${pics}.txt
 else
-  eche "$pics unchanged"
+  echo "$pics unchanged"
 fi
 
 
